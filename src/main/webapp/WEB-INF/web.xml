@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+         version="6.0">
+
+    <display-name>Catalogo de Livros</display-name>
+    <description>CRUD simples com JSP/Servlets/JDBC</description>
+
+    <!-- Configuração do banco H2 em arquivo -->
+    <context-param>
+        <param-name>JDBC_URL</param-name>
+        <param-value>jdbc:h2:file:D:/Projects/Personal/catalogo-livros/data/catalogo_livros_db;AUTO_SERVER=TRUE;MODE=MySQL;DATABASE_TO_UPPER=false</param-value>
+    </context-param>
+    <context-param>
+        <param-name>JDBC_USER</param-name>
+        <param-value>sa</param-value>
+    </context-param>
+    <context-param>
+        <param-name>JDBC_PASSWORD</param-name>
+        <param-value/>
+    </context-param>
+    <context-param>
+        <param-name>INIT_SQL_PATH</param-name>
+        <param-value>/db/init.sql</param-value>
+    </context-param>
+
+    <!-- Listener que roda o init.sql ao subir -->
+    <listener>
+        <listener-class>com.gabriel.catalog.web.AppContextListener</listener-class>
+    </listener>
+
+    <!-- JSPs em UTF-8 (sem el-ignored no JSP 3.x) -->
+    <jsp-config>
+        <jsp-property-group>
+            <url-pattern>*.jsp</url-pattern>
+            <page-encoding>UTF-8</page-encoding>
+            <scripting-invalid>true</scripting-invalid>
+        </jsp-property-group>
+    </jsp-config>
+
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+</web-app>
