@@ -30,7 +30,11 @@ public class BookEditServlet extends HttpServlet {
         b.setGenre(req.getParameter("genre"));
         b.setSynopsis(req.getParameter("synopsis"));
         var dao = new BookDao((ConnectionFactory) getServletContext().getAttribute("cf"));
-        try { dao.update(b); resp.sendRedirect(req.getContextPath() + "/books"); }
+        try {
+            dao.update(b); resp.sendRedirect(req.getContextPath() + "/books");
+            req.getSession().setAttribute("flash_success", "Livro atualizado com sucesso!");
+            resp.sendRedirect(req.getContextPath() + "/books");
+        }
         catch (Exception e) { throw new ServletException(e); }
     }
 }

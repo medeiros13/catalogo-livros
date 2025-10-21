@@ -26,7 +26,11 @@ public class BookCreateServlet extends HttpServlet {
         b.setGenre(req.getParameter("genre"));
         b.setSynopsis(req.getParameter("synopsis"));
         var dao = new BookDao((ConnectionFactory) getServletContext().getAttribute("cf"));
-        try { dao.insert(b); resp.sendRedirect(req.getContextPath() + "/books"); }
+        try {
+            dao.insert(b); resp.sendRedirect(req.getContextPath() + "/books");
+            req.getSession().setAttribute("flash_success", "Livro salvo com sucesso!");
+            resp.sendRedirect(req.getContextPath() + "/books");
+        }
         catch (Exception e) { throw new ServletException(e); }
     }
 }

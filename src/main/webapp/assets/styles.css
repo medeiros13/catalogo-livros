@@ -1,0 +1,18 @@
+﻿:root {
+    --brand: #4f46e5;
+}
+
+body { background: #f7f7fb; }
+.navbar { background: #fff; box-shadow: 0 1px 12px rgba(0,0,0,.06); }
+.navbar-brand { font-weight: 700; color: var(--brand) !important; }
+.container-narrow { max-width: 960px; }
+
+.card { border-radius: 14px; border: none; box-shadow: 0 6px 18px rgba(0,0,0,.06); }
+.table { background: #fff; }
+.table thead th { background: #f0f3ff; color: #333; }
+
+.btn-brand { background: var(--brand); border-color: var(--brand); }
+.btn-brand:hover { filter: brightness(0.95); }
+
+.form-control, .form-select, textarea { border-radius: 10px; }
+.badge-soft { background: #eef2ff; color: #3730a3; border: 1px solid #e0e7ff; }
