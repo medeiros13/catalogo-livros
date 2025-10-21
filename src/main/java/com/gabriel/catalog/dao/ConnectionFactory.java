@@ -6,12 +6,22 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConnectionFactory {
+    static {
+        try {
+            Class.forName("org.h2.Driver"); // garante o registro do driver no Tomcat
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("H2 driver não encontrado no classpath", e);
+        }
+    }
+
     private final String url;
     private final String user;
     private final String pass;
 
     public ConnectionFactory(String url, String user, String pass) {
-        this.url = url; this.user = user; this.pass = pass;
+        this.url = url;
+        this.user = user;
+        this.pass = pass;
     }
 
     public static ConnectionFactory fromContext(ServletContext ctx) {

@@ -1,4 +1,5 @@
 ﻿<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -12,8 +13,11 @@
 </head>
 <body>
 <h1>Catálogo de Livros</h1>
-<p><a class="button" href="books">Ver livros</a> · <a class="button" href="books/new">Cadastrar novo</a></p>
-<form class="search" action="books/search" method="get">
+<p>
+    <a class="button" href="${pageContext.request.contextPath}/books">Ver livros</a> ·
+    <a class="button" href="${pageContext.request.contextPath}/books/new">Cadastrar novo</a>
+</p>
+<form class="search" action="${pageContext.request.contextPath}/books/search" method="get">
     <label>Buscar por título ou autor: <input type="text" name="q" /></label>
     <button type="submit">Buscar</button>
 </form>

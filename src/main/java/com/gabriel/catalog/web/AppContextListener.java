@@ -18,9 +18,12 @@ public class AppContextListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         var ctx = sce.getServletContext();
         var cf = ConnectionFactory.fromContext(ctx);
-        String initPath = ctx.getInitParameter("INIT_SQL_PATH");
+
         try (Connection c = cf.getConnection(); Statement st = c.createStatement()) {
-            try (InputStream is = ctx.getResourceAsStream(initPath)) {
+            // Lê o init.sql do classpath: /WEB-INF/classes/db/init.sql
+            try (InputStream is = Thread.currentThread()
+                    .getContextClassLoader()
+                    .getResourceAsStream("db/init.sql")) {
                 if (is != null) {
                     try (BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
                         StringBuilder sb = new StringBuilder();
@@ -36,6 +39,7 @@ public class AppContextListener implements ServletContextListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        ctx.setAttribute("cf", cf); // para reuso no ciclo de vida
+
+        ctx.setAttribute("cf", cf);
     }
 }

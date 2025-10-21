@@ -3,19 +3,20 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>com.gabriel.catalog</groupId>
     <artifactId>catalogo-livros</artifactId>
     <version>1.0.0</version>
     <packaging>war</packaging>
 
     <properties>
-        <maven.compiler.release>21</maven.compiler.release>
+        <!-- Escolha uma versão de linguagem suportada pelo Tomcat; 21 LTS é seguro. -->
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
-        <!-- Jakarta Servlet API 6.1 (Tomcat 11) - provided pelo servidor -->
+        <!-- API de Servlets Jakarta EE 11 (Tomcat 11.x). Escopo provided: o servidor fornece. -->
         <dependency>
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
@@ -23,7 +24,7 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- JSTL (Jakarta) -->
+        <!-- JSTL para Jakarta (tags JSTL em JSPs) -->
         <dependency>
             <groupId>jakarta.servlet.jsp.jstl</groupId>
             <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
@@ -35,7 +36,7 @@
             <version>3.0.1</version>
         </dependency>
 
-        <!-- H2 database -->
+        <!-- Banco de dados H2 (arquivo) -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
@@ -46,6 +47,15 @@
     <build>
         <finalName>catalogo-livros</finalName>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <release>21</release>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
