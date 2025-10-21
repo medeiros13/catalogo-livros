@@ -13,7 +13,7 @@
 </head>
 <body>
 <h1><c:choose><c:when test="${mode eq 'edit'}">Editar</c:when><c:otherwise>Novo</c:otherwise></c:choose> Livro</h1>
-<form method="post" action="${pageContext.request.requestURI}">
+<form method="post" action="${pageContext.request.contextPath}/books/new">
     <c:if test="${mode eq 'edit'}">
         <input type="hidden" name="id" value="${book.id}" />
     </c:if>
