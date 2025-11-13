@@ -4,37 +4,80 @@ import com.gabriel.catalog.dao.BookDao;
 import com.gabriel.catalog.dao.ConnectionFactory;
 import com.gabriel.catalog.model.Book;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 
-@WebServlet(name="BookEditServlet", urlPatterns={"/books/edit"})
+@WebServlet(urlPatterns = "/books/edit")
 public class BookEditServlet extends HttpServlet {
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        long id = Long.parseLong(req.getParameter("id"));
-        var dao = new BookDao((ConnectionFactory) getServletContext().getAttribute("cf"));
-        try { req.setAttribute("book", dao.findById(id)); req.setAttribute("mode", "edit");
+        String idStr = req.getParameter("id");
+        if (idStr == null || idStr.isBlank()) {
+            resp.sendRedirect(req.getContextPath() + "/books");
+            return;
+        }
+        try {
+            ConnectionFactory cf = (ConnectionFactory) getServletContext().getAttribute("cf");
+            var dao = new BookDao(cf);
+            var book = dao.findById(Long.parseLong(idStr));
+            if (book == null) {
+                req.getSession().setAttribute("flash_error", "Livro não encontrado.");
+                resp.sendRedirect(req.getContextPath() + "/books");
+                return;
+            }
+            req.setAttribute("mode", "edit");
+            req.setAttribute("book", book);
             req.getRequestDispatcher("/WEB-INF/jsp/form.jsp").forward(req, resp);
-        } catch (Exception e) { throw new ServletException(e); }
+        } catch (Exception e) {
+            throw new ServletException(e);
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
-        var b = new Book();
-        b.setId(Long.parseLong(req.getParameter("id")));
+
+        String idStr = req.getParameter("id");
+        if (idStr == null || idStr.isBlank()) {
+            req.getSession().setAttribute("flash_error", "ID inválido para edição.");
+            resp.sendRedirect(req.getContextPath() + "/books");
+            return;
+        }
+
+        Book b = new Book();
+        b.setId(Long.valueOf(idStr));
         b.setTitle(req.getParameter("title"));
         b.setAuthor(req.getParameter("author"));
-        b.setYearPublished(Integer.parseInt(req.getParameter("yearPublished")));
         b.setGenre(req.getParameter("genre"));
         b.setSynopsis(req.getParameter("synopsis"));
-        var dao = new BookDao((ConnectionFactory) getServletContext().getAttribute("cf"));
+
+        Integer year = null;
+        try { year = Integer.valueOf(req.getParameter("yearPublished")); } catch (Exception ignored) {}
+        if (year == null) {
+            req.setAttribute("mode", "edit");
+            req.setAttribute("error", "Ano inválido.");
+            req.setAttribute("book", b);
+            req.getRequestDispatcher("/WEB-INF/jsp/form.jsp").forward(req, resp);
+            return;
+        }
+        b.setYearPublished(year);
+
         try {
-            dao.update(b); resp.sendRedirect(req.getContextPath() + "/books");
+            ConnectionFactory cf = (ConnectionFactory) getServletContext().getAttribute("cf");
+            new BookDao(cf).update(b);
+
             req.getSession().setAttribute("flash_success", "Livro atualizado com sucesso!");
             resp.sendRedirect(req.getContextPath() + "/books");
+        } catch (Exception e) {
+            req.setAttribute("mode", "edit");
+            req.setAttribute("error", "Falha ao atualizar: " + e.getMessage());
+            req.setAttribute("book", b);
+            req.getRequestDispatcher("/WEB-INF/jsp/form.jsp").forward(req, resp);
         }
-        catch (Exception e) { throw new ServletException(e); }
     }
 }

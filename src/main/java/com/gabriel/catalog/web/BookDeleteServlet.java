@@ -1,24 +1,41 @@
 package com.gabriel.catalog.web;
-
 import com.gabriel.catalog.dao.BookDao;
 import com.gabriel.catalog.dao.ConnectionFactory;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name="BookDeleteServlet", urlPatterns={"/books/delete"})
+@WebServlet(urlPatterns = "/books/delete")
 public class BookDeleteServlet extends HttpServlet {
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        long id = Long.parseLong(req.getParameter("id"));
-        var dao = new BookDao((ConnectionFactory) getServletContext().getAttribute("cf"));
-        try {
-            dao.delete(id); resp.sendRedirect(req.getContextPath() + "/books");
-            req.getSession().setAttribute("flash_success", "Livro excluído com sucesso!");
-            resp.sendRedirect(req.getContextPath() + "/books");
 
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String idStr = req.getParameter("id");
+        String ctx = req.getContextPath();
+
+        if (idStr == null || idStr.isBlank()) {
+            req.getSession().setAttribute("flash_error", "ID inválido para exclusão.");
+            resp.sendRedirect(ctx + "/books");
+            return;
         }
-        catch (Exception e) { throw new ServletException(e); }
+
+        try {
+            long id = Long.parseLong(idStr);
+            ConnectionFactory cf = (ConnectionFactory) getServletContext().getAttribute("cf");
+            new BookDao(cf).delete(id);
+
+            req.getSession().setAttribute("flash_success", "Livro excluído com sucesso!");
+            resp.sendRedirect(ctx + "/books");
+        } catch (Exception e) {
+            req.getSession().setAttribute("flash_error", "Falha ao excluir: " + e.getMessage());
+            resp.sendRedirect(ctx + "/books");
+        }
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        resp.sendRedirect(req.getContextPath() + "/books");
     }
 }
