@@ -1,4 +1,4 @@
-﻿<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <jsp:include page="/WEB-INF/jsp/_header.jsp">
     <jsp:param name="pageTitle" value="${mode eq 'edit' ? 'Editar' : 'Novo'} • Catálogo"/>
@@ -33,7 +33,12 @@
 
         <div class="col-md-6">
             <label class="form-label">Gênero</label>
-            <input class="form-control" type="text" name="genre" value="${book.genre}" required />
+            <select class="form-select" name="genreId" required>
+                <option value="" disabled ${empty book.genreId ? 'selected' : ''}>Selecione...</option>
+                <c:forEach var="g" items="${genres}">
+                    <option value="${g.id}" ${book.genreId == g.id ? 'selected' : ''}>${g.name}</option>
+                </c:forEach>
+            </select>
         </div>
 
         <div class="col-12">

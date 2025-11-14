@@ -1,4 +1,4 @@
-﻿<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <jsp:include page="/WEB-INF/jsp/_header.jsp">
     <jsp:param name="pageTitle" value="Livros • Catálogo"/>

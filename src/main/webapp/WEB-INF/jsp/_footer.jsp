@@ -1,4 +1,4 @@
-﻿</main>
+</main>
 <footer class="py-4">
     <div class="container container-narrow text-center text-muted">
         <small>Feito com JSP/Servlets + Bootstrap • ${pageContext.request.contextPath}</small>

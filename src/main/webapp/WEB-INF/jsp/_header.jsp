@@ -1,4 +1,4 @@
-﻿<%@ page contentType="text/html; charset=UTF-8" isELIgnored="false" %>
+<%@ page contentType="text/html; charset=UTF-8" isELIgnored="false" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="pt-br">

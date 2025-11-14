@@ -4,42 +4,42 @@ import com.gabriel.catalog.dao.ConnectionFactory;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
-
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
-import java.sql.Connection;
-import java.sql.Statement;
+import org.flywaydb.core.Flyway;
+import org.h2.jdbcx.JdbcDataSource;
 
 @WebListener
 public class AppContextListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        var ctx = sce.getServletContext();
-        var cf = ConnectionFactory.fromContext(ctx);
+        var ctx  = sce.getServletContext();
+        var url  = ctx.getInitParameter("JDBC_URL");
+        var user = ctx.getInitParameter("JDBC_USER");
+        var pass = ctx.getInitParameter("JDBC_PASSWORD");
 
-        try (Connection c = cf.getConnection(); Statement st = c.createStatement()) {
-            // Lê o init.sql do classpath: /WEB-INF/classes/db/init.sql
-            try (InputStream is = Thread.currentThread()
-                    .getContextClassLoader()
-                    .getResourceAsStream("db/init.sql")) {
-                if (is != null) {
-                    try (BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
-                        StringBuilder sb = new StringBuilder();
-                        String line;
-                        while ((line = br.readLine()) != null) sb.append(line).append('\n');
-                        for (String sql : sb.toString().split(";\\s*\\n")) {
-                            String s = sql.trim();
-                            if (!s.isEmpty()) st.execute(s);
-                        }
-                    }
-                }
-            }
+        JdbcDataSource ds = new JdbcDataSource();
+        ds.setURL(url);
+        ds.setUser(user);
+        ds.setPassword(pass);
+
+        try {
+            var flyway = Flyway.configure()
+                    .dataSource(ds)
+                    .locations("classpath:db/migration")
+                    .baselineOnMigrate(true)
+                    .load();
+
+            // 1x para corrigir histórico/checksum/migrations inválidas
+            flyway.repair();
+
+            // aplica V1, V2 ...
+            flyway.migrate();
+
+            // deixa a ConnectionFactory para os DAOs
+            ctx.setAttribute("cf", new ConnectionFactory(url, user, pass));
         } catch (Exception e) {
+            // loga o motivo real no catalina.log
             e.printStackTrace();
+            throw new RuntimeException("Falha ao inicializar Flyway/H2: " + e.getMessage(), e);
         }
-
-        ctx.setAttribute("cf", cf);
     }
 }

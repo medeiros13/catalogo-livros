@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
@@ -7,11 +7,11 @@
     <display-name>Catalogo de Livros</display-name>
     <description>CRUD simples com JSP/Servlets/JDBC</description>
 
-    <!-- H2 em arquivo (seu caminho atual) -->
     <context-param>
         <param-name>JDBC_URL</param-name>
-        <param-value>jdbc:h2:file:D:/Projects/Personal/catalogo-livros/catalogo-livros/data/catalogo_livros_db;AUTO_SERVER=TRUE;MODE=MySQL;DATABASE_TO_UPPER=false</param-value>
+        <param-value>jdbc:h2:file:D:/Projects/Personal/catalogo-livros/catalogo-livros/data/catalogo_livros_db_v2;AUTO_SERVER=TRUE;MODE=MySQL;DATABASE_TO_UPPER=false</param-value>
     </context-param>
+
     <context-param>
         <param-name>JDBC_USER</param-name>
         <param-value>sa</param-value>
@@ -21,7 +21,6 @@
         <param-value/>
     </context-param>
 
-    <!-- Listener que inicializa o banco (roda init.sql do classpath) -->
     <listener>
         <listener-class>com.gabriel.catalog.web.AppContextListener</listener-class>
     </listener>
