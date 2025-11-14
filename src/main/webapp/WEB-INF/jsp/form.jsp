@@ -23,7 +23,14 @@
 
         <div class="col-md-4">
             <label class="form-label">Ano de publicação</label>
-            <input class="form-control" type="number" name="yearPublished" value="${book.yearPublished}" required />
+            <input type="text"
+                   class="form-control yearpicker"
+                   id="yearPublished"
+                   name="yearPublished"
+                   autocomplete="off"
+                   required
+                   data-initial="${book.yearPublished}"
+                   value="${book.yearPublished}"/>
         </div>
 
         <div class="col-md-6">
@@ -33,7 +40,7 @@
 
         <div class="col-md-6">
             <label class="form-label">Gênero</label>
-            <select class="form-select" name="genreId" required>
+            <select id="genreId" name="genreId" class="form-select" required>
                 <option value="" disabled ${empty book.genreId ? 'selected' : ''}>Selecione...</option>
                 <c:forEach var="g" items="${genres}">
                     <option value="${g.id}" ${book.genreId == g.id ? 'selected' : ''}>${g.name}</option>
