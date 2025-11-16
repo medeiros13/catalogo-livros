@@ -39,7 +39,7 @@
         </div>
 
         <div class="col-md-6">
-            <label class="form-label">Gênero</label>
+            <label for="genreId" class="form-label">Gênero</label>
             <select id="genreId" name="genreId" class="form-select" required>
                 <option value="" disabled ${empty book.genreId ? 'selected' : ''}>Selecione...</option>
                 <c:forEach var="g" items="${genres}">
