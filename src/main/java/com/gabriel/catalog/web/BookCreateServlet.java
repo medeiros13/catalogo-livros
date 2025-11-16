@@ -42,6 +42,23 @@ public class BookCreateServlet extends HttpServlet {
         b.setGenre(req.getParameter("genre"));
         b.setSynopsis(req.getParameter("synopsis"));
 
+        Long genreId = null;
+        try {
+            String genreIdParam = req.getParameter("genreId");
+            if (genreIdParam != null && !genreIdParam.isBlank()) {
+                genreId = Long.valueOf(genreIdParam);
+            }
+        } catch (NumberFormatException ignored) {}
+        if (genreId == null) {
+            req.setAttribute("mode", "new");
+            req.setAttribute("error", "Gênero inválido.");
+            req.setAttribute("book", b);
+            loadGenres(req);
+            req.getRequestDispatcher("/WEB-INF/jsp/form.jsp").forward(req, resp);
+            return;
+        }
+        b.setGenreId(genreId);
+
         // validação do ano
         Integer year = null;
         try { year = Integer.valueOf(req.getParameter("yearPublished")); } catch (Exception ignored) {}
