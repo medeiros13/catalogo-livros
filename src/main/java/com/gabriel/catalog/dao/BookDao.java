@@ -136,7 +136,7 @@ public class BookDao {
         b.setAuthor(rs.getString("AUTHOR"));
         b.setYearPublished(rs.getInt("YEAR_PUBLISHED"));
         b.setGenreId(rs.getLong("GENRE_ID"));
-        b.setGenre(rs.getString("GENRE_NAME")); // para exibição nas telas
+        b.setGenre(rs.getString("GENRE_NAME"));
         b.setSynopsis(rs.getString("SYNOPSIS"));
         return b;
     }

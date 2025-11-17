@@ -28,16 +28,12 @@ public class AppContextListener implements ServletContextListener {
                     .baselineOnMigrate(true)
                     .load();
 
-            // 1x para corrigir histórico/checksum/migrations inválidas
             flyway.repair();
 
-            // aplica V1, V2 ...
             flyway.migrate();
 
-            // deixa a ConnectionFactory para os DAOs
             ctx.setAttribute("cf", new ConnectionFactory(url, user, pass));
         } catch (Exception e) {
-            // loga o motivo real no catalina.log
             e.printStackTrace();
             throw new RuntimeException("Falha ao inicializar Flyway/H2: " + e.getMessage(), e);
         }

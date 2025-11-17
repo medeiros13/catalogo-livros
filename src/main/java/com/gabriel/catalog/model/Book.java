@@ -19,8 +19,6 @@ public class Book {
         this.genre = genre;
         this.synopsis = synopsis;
     }
-
-    // Getters e Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getTitle() { return title; }
@@ -33,6 +31,5 @@ public class Book {
     public void setSynopsis(String synopsis) { this.synopsis = synopsis; }
     public Long getGenreId() { return genreId; }
     public void setGenreId(Long genreId) { this.genreId = genreId; }
-    public String getGenre() { return genre; }
     public void setGenre(String genre) { this.genre = genre; }
 }
