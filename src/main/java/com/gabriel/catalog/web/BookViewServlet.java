@@ -2,7 +2,6 @@ package com.gabriel.catalog.web;
 
 import com.gabriel.catalog.dao.BookDao;
 import com.gabriel.catalog.dao.ConnectionFactory;
-import com.gabriel.catalog.model.Book;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -33,9 +32,9 @@ public class BookViewServlet extends HttpServlet {
             return;
         }
 
-        BookDao dao = new BookDao(cf());
+        var dao = new BookDao(cf());
         try {
-            Book book = dao.findById(id);
+            var book = dao.findById(id);
             if (book == null) {
                 req.getSession().setAttribute("flash_error", "Livro não encontrado.");
                 resp.sendRedirect(req.getContextPath() + "/books");

@@ -23,11 +23,11 @@ public class BookSearchServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
-        String q = req.getParameter("q");
+        var q = req.getParameter("q");
 
         try {
-            BookDao dao = new BookDao(cf(req));
-            List<Book> books = (q == null || q.isBlank())
+            var dao = new BookDao(cf(req));
+            var books = (q == null || q.isBlank())
                     ? dao.findAll()
                     : dao.searchByTitleOrAuthor(q);
 

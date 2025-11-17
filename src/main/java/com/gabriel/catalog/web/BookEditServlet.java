@@ -67,21 +67,21 @@ public class BookEditServlet extends HttpServlet {
 
         req.setCharacterEncoding("UTF-8");
 
-        String idStr = req.getParameter("id");
-        Long id;
+        var idStr = req.getParameter("id");
+        long id;
         try {
-            id = Long.valueOf(idStr);
+            id = Long.parseLong(idStr);
         } catch (NumberFormatException e) {
             req.getSession().setAttribute("flash_error", "ID de livro inválido.");
             resp.sendRedirect(req.getContextPath() + "/books");
             return;
         }
 
-        String title = trim(req.getParameter("title"));
-        String author = trim(req.getParameter("author"));
-        String yearStr = trim(req.getParameter("yearPublished"));
-        String genreStr = trim(req.getParameter("genreId"));
-        String synopsis = trim(req.getParameter("synopsis"));
+        var title = trim(req.getParameter("title"));
+        var author = trim(req.getParameter("author"));
+        var yearStr = trim(req.getParameter("yearPublished"));
+        var genreStr = trim(req.getParameter("genreId"));
+        var synopsis = trim(req.getParameter("synopsis"));
 
         Book b = new Book();
         b.setId(id);
@@ -108,7 +108,7 @@ public class BookEditServlet extends HttpServlet {
             errors.add("Selecione um gênero.");
         } else {
             try {
-                Long genreId = Long.valueOf(genreStr);
+                var genreId = Long.valueOf(genreStr);
                 b.setGenreId(genreId);
             } catch (NumberFormatException e) {
                 errors.add("Gênero inválido.");

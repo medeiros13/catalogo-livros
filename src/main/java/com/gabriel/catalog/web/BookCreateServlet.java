@@ -4,7 +4,6 @@ import com.gabriel.catalog.dao.BookDao;
 import com.gabriel.catalog.dao.ConnectionFactory;
 import com.gabriel.catalog.dao.GenreDao;
 import com.gabriel.catalog.model.Book;
-import com.gabriel.catalog.model.Genre;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -13,7 +12,6 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 @WebServlet(urlPatterns = "/books/new")
 public class BookCreateServlet extends HttpServlet {
@@ -55,18 +53,17 @@ public class BookCreateServlet extends HttpServlet {
         String genreStr = trim(req.getParameter("genreId"));
         String synopsis = trim(req.getParameter("synopsis"));
 
-        Book b = new Book();
+        var b = new Book();
         b.setTitle(title);
         b.setAuthor(author);
         b.setSynopsis(synopsis != null ? synopsis : "");
 
-        List<String> errors = new ArrayList<>();
+        var errors = new ArrayList<String>();
 
         if (title == null || title.isBlank()) {
             errors.add("O título é obrigatório.");
         }
 
-        // Ano (opcional, mas se preenchido precisa ser válido)
         if (yearStr != null && !yearStr.isBlank()) {
             try {
                 int year = Integer.parseInt(yearStr);
@@ -76,12 +73,11 @@ public class BookCreateServlet extends HttpServlet {
             }
         }
 
-        // Gênero (opcional ou obrigatório, dependendo da sua regra; aqui vou considerar obrigatório)
         if (genreStr == null || genreStr.isBlank()) {
             errors.add("Selecione um gênero.");
         } else {
             try {
-                Long genreId = Long.valueOf(genreStr);
+                var genreId = Long.valueOf(genreStr);
                 b.setGenreId(genreId);
             } catch (NumberFormatException e) {
                 errors.add("Gênero inválido.");
