@@ -17,9 +17,9 @@ public class GenreDao {
              var rs = ps.executeQuery()) {
             List<Genre> list = new ArrayList<>();
             while (rs.next()) {
-                Genre g = new Genre();
-                g.setId(rs.getLong("ID"));
-                g.setName(rs.getString("NAME"));
+                var id = rs.getLong("ID");
+                var name = rs.getString("NAME");
+                Genre g = new Genre(id,name);
                 list.add(g);
             }
             return list;

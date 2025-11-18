@@ -130,14 +130,12 @@ public class BookDao {
     }
 
     private Book map(ResultSet rs) throws SQLException {
-        Book b = new Book();
-        b.setId(rs.getLong("ID"));
-        b.setTitle(rs.getString("TITLE"));
-        b.setAuthor(rs.getString("AUTHOR"));
-        b.setYearPublished(rs.getInt("YEAR_PUBLISHED"));
-        b.setGenreId(rs.getLong("GENRE_ID"));
-        b.setGenre(rs.getString("GENRE_NAME"));
-        b.setSynopsis(rs.getString("SYNOPSIS"));
-        return b;
+        var id = rs.getLong("ID");
+        var title = rs.getString("TITLE");
+        var author = rs.getString("AUTHOR");
+        var yearPublished = rs.getInt("YEAR_PUBLISHED");
+        var genreId = rs.getLong("GENRE_ID");
+        var synopsis = rs.getString("SYNOPSIS");
+        return new Book(id, title, author, yearPublished, genreId, synopsis);
     }
 }

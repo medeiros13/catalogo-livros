@@ -28,7 +28,7 @@ public class BookCreateServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+            throws ServletException {
 
         req.setAttribute("mode", "new");
         req.setAttribute("book", new Book());
